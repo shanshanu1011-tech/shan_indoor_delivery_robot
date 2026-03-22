@@ -1,0 +1,99 @@
+<?xml version="1.0" ?>
+<robot name="bot" xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+<xacro:property name="body_color" value="Gazebo/Red" />
+<xacro:property name="wheel_color" value="Gazebo/Black" />
+
+<gazebo>
+    <plugin name="gz::sim::systems::DiffDrive" filename="gz-sim-diff-drive-system">
+
+        <!-- Wheel Information -->
+        <left_joint>Revolute 2</left_joint>
+        <left_joint>Revolute 3</left_joint>
+        <right_joint>Revolute 1</right_joint>
+        <right_joint>Revolute 4</right_joint>
+        <wheel_separation>0.4</wheel_separation>
+        <wheel_radius>0.03</wheel_radius>
+
+        <!-- Input -->
+        <topic>cmd_vel</topic>
+
+        <!-- Output -->
+        <frame_id>odom</frame_id>
+        <child_frame_id>base_link</child_frame_id>
+        <odom_topic>odom</odom_topic>            
+        <tf_topic>tf</tf_topic>
+
+    </plugin>
+
+
+    <plugin name="gz::sim::systems::JointStatePublisher" filename="gz-sim-joint-state-publisher-system">
+        <topic>joint_states</topic>
+        <joint_name>Revolute 1</joint_name>
+        <joint_name>Revolute 2</joint_name>
+        <joint_name>Revolute 3</joint_name>
+        <joint_name>Revolute 4</joint_name>
+    </plugin>
+</gazebo>
+
+  <gazebo reference="lidar_1">
+    <material>${wheel_color}</material>
+      <sensor name="laser" type="gpu_lidar">
+          <pose> 0 0 0 0 0 0 </pose>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+          <lidar> 
+            <scan>
+                <horizontal>
+                    <samples>360</samples>
+                    <min_angle>-3.14</min_angle>
+                    <max_angle>3.14</max_angle>
+                </horizontal>
+            </scan>
+            <range>
+                <min>0.3</min>
+                <max>12</max>
+            </range>
+        </lidar>
+        <topic>scan</topic>
+        <gz_frame_id>lidar_1</gz_frame_id>
+      </sensor>
+  </gazebo>
+
+<gazebo reference="base_link">
+  <material>${body_color}</material>
+  <mu1>0.1</mu1>
+  <mu2>0.1</mu2>
+  <self_collide>true</self_collide>
+  <gravity>true</gravity>
+</gazebo>
+
+<gazebo reference="wheel_FR_1">
+  <material>${wheel_color}</material>
+  <mu1>0.1</mu1>
+  <mu2>0.1</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="wheel_FL_1">
+  <material>${wheel_color}</material>
+  <mu1>0.1</mu1>
+  <mu2>0.1</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="wheel_BL_1">
+  <material>${wheel_color}</material>
+  <mu1>0.1</mu1>
+  <mu2>0.1</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="wheel_BR_1">
+  <material>${wheel_color}</material>
+  <mu1>0.1</mu1>
+  <mu2>0.1</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+</robot>
